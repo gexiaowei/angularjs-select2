@@ -1,5 +1,5 @@
 (function(angular){
-    var app = angular.module('app', []);
+    var app = angular.module('select2', []);
 /**
  * select2封装
  * @param {scope} ng-model 选中的ID
@@ -11,7 +11,7 @@
  * <input select2 ng-model="a" select2-model="b" config="default" query="member" type="text" placeholder="占位符" />
  * <select select2 ng-model="b" class="form-control"></select>
  */
-app.directive('select2', function (select2Query) {
+app.directive('select2', function () {
     return {
         restrict: 'A',
         scope: {
@@ -55,9 +55,7 @@ app.directive('select2', function (select2Query) {
                 var $element = $(element);
 
                 // 获取内置配置
-                if(attrs.query) {
-                    scope.config = select2Query[attrs.query]();
-                }
+
 
                 // 动态生成select2
                 scope.$watch('config', function () {
@@ -88,67 +86,5 @@ app.directive('select2', function (select2Query) {
         }
     }
 });
-
-/**
- * select2 内置查询功能
- */
-app.factory('select2Query', function ($timeout) {
-    return {
-        testAJAX: function () {
-            var config = {
-                minimumInputLength: 1,
-                ajax: {
-                    url: "http://api.rottentomatoes.com/api/public/v1.0/movies.json",
-                    dataType: 'jsonp',
-                    data: function (term) {
-                        return {
-                            q: term,
-                            page_limit: 10,
-                            apikey: "ju6z9mjyajq2djue3gbvv26t"
-                        };
-                    },
-                    results: function (data, page) {
-                        return {results: data.movies};
-                    }
-                },
-                formatResult: function (data) {
-                    return data.title;
-                },
-                formatSelection: function (data) {
-                    return data.title;
-                }
-            };
-
-            return config;
-        }
-    }
-});
-
-app.controller('appCtrl', function ($scope, $timeout) {
-    $scope.config1 = {
-        data: [],
-        placeholder: '尚无数据'
-    };
-
-    $timeout(function () {
-        $scope.config1.data = [{id:1,text:'bug'},{id:2,text:'duplicate'},{id:3,text:'invalid'},{id:4,text:'wontfix'}]
-        $scope.config1.placeholder = '加载完毕'
-    }, 1000);
-
-
-    $scope.config2 = [
-        {id: 6, text: '来自ng-repeat'},
-        {id: 7, text: '来自ng-repeat'},
-        {id: 8, text: '来自ng-repeat'}
-    ];
-
-    $scope.config3 = {
-        data: [{id:1,text:'bug'},{id:2,text:'duplicate'},{id:3,text:'invalid'},{id:4,text:'wontfix'}]
-        // 其他配置略，可以去看看内置配置中的ajax配置
-    };
-
-});
-
-angular.bootstrap(document, ['app']);
 
 })(angular);
