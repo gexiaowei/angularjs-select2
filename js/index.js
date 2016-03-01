@@ -1,4 +1,5 @@
-var app = angular.module('app', []);
+(function(angular){
+    var app = angular.module('app', []);
 /**
  * select2封装
  * @param {scope} ng-model 选中的ID
@@ -149,3 +150,5 @@ app.controller('appCtrl', function ($scope, $timeout) {
 });
 
 angular.bootstrap(document, ['app']);
+
+})(angular);
